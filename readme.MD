@@ -1,12 +1,21 @@
-## Para compilar e Executar 🌟
+# Projeto 🛠️
 
-- Compilar o arquivo
+- WIP
 
-  ```bash
-  gcc main.c -o main.exe
-  ```
-- Executar o arquivo compilado
+## Sobre 📚
 
-  ```bash
-  ./main.exe
-  ```
+- WIP
+
+### Compilar o arquivo 🌟
+
+- Compilar arquivo:
+
+    ```bash
+      gcc main.c -o main.exe
+    ```
+
+- Executar programa compilado:
+
+    ```bash
+      ./main.exe
+    ```
