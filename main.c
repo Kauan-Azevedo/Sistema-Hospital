@@ -188,7 +188,7 @@ int main()
             printf("Nome da clinica: ");
             scanf("%s", clinic.name);
             clinic.id = num_clinics + 1;
-            add_entity(&clinic, &num_clinics, clinics, sizeof(Clinic), "Clinic");
+            adicionar_entidade(&clinic, &num_clinics, clinics, sizeof(Clinic), "Clinic");
         }
         else if (option == 2)
         {
@@ -200,7 +200,7 @@ int main()
             printf("ID da clinica: ");
             scanf("%d", &employee.clinic_id);
             employee.id = num_employees + 1;
-            add_entity(&employee, &num_employees, employees, sizeof(Employee), "Employee");
+            adicionar_entidade(&employee, &num_employees, employees, sizeof(Employee), "Employee");
         }
         else if (option == 3)
         {
@@ -212,7 +212,7 @@ int main()
             printf("ID da clinica: ");
             scanf("%d", &doctor.clinic_id);
             doctor.id = num_doctors + 1;
-            add_entity(&doctor, &num_doctors, doctors, sizeof(Doctor), "Doctor");
+            adicionar_entidade(&doctor, &num_doctors, doctors, sizeof(Doctor), "Doctor");
         }
         else if (option == 4)
         {
@@ -222,7 +222,7 @@ int main()
             printf("Email do paciente: ");
             scanf("%s", patient.email);
             patient.id = num_patients + 1;
-            add_entity(&patient, &num_patients, patients, sizeof(Patient), "Patient");
+            adicionar_entidade(&patient, &num_patients, patients, sizeof(Patient), "Patient");
         }
         else if (option == 5)
         {
@@ -230,7 +230,7 @@ int main()
             printf("Nome da doenca: ");
             scanf("%s", disease.name);
             disease.id = num_diseases + 1;
-            add_entity(&disease, &num_diseases, diseases, sizeof(Disease), "Disease");
+            adicionar_entidade(&disease, &num_diseases, diseases, sizeof(Disease), "Disease");
         }
         else if (option == 6)
         {
