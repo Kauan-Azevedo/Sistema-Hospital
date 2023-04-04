@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
 typedef struct
 {
     int id;
@@ -44,18 +43,20 @@ typedef struct
     int id_clinica;
 } Funcionario;
 
-void salvarHospital(Hospital hospital)
+// void salvarHospital(Hospital hospital)
+void salvarHospital(int id, char nome[], char endereco[], char telefone[], char email[])
 {
-    FILE *arquivo = fopen("hospitais.txt", "a");
-    fprintf(arquivo, "%d;%s;%s;%s;%s\n", hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email);
+    FILE *arquivo = fopen("hospitais.csv", "a");
+    fprintf(arquivo, "%d;%s;%s;%s;%s\n", id, nome, endereco, telefone, email);
     fclose(arquivo);
 }
 
 Hospital buscarHospital(int id)
 {
-    FILE *arquivo = fopen("hospitais.txt", "r");
+    FILE *arquivo = fopen("hospitais.csv", "r");
     Hospital hospital;
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email) != EOF)
+
+    while (fscanf(arquivo, "%i;%[^;];%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email) != EOF)
     {
         if (hospital.id == id)
         {
@@ -70,7 +71,7 @@ Hospital buscarHospital(int id)
 
 void atualizarHospital(Hospital hospital)
 {
-    FILE *arquivo = fopen("hospitais.txt", "r+");
+    FILE *arquivo = fopen("hospitais.csv", "r+");
     Hospital h;
     long int posicao;
     while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%s\n", &h.id, h.nome, h.endereco, h.telefone, h.email) != EOF)
@@ -88,7 +89,7 @@ void atualizarHospital(Hospital hospital)
 
 void excluirHospital(int id)
 {
-    FILE *arquivo = fopen("hospitais.txt", "r");
+    FILE *arquivo = fopen("hospitais.csv", "r");
     FILE *arquivo_temp = fopen("hospitais_temp.txt", "w");
     Hospital hospital;
     while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email) != EOF)
@@ -106,30 +107,54 @@ void excluirHospital(int id)
 
 int main()
 {
-
     int escolha;
-
-    printf("Bem-vindo,\nOque deseja fazer?\n0 - Sair\n1 - Registrar Hospital\n2 - Buscar Hospital\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
-    scanf("%i", &escolha);
-    if (escolha == 0)
+    printf("Bem-vindo,\nOque deseja fazer?\n");
+    do
     {
-        system("cls");
-        printf("Saindo...");
-    }
-    else if (escolha == 1)
-    {
-        int id;
-        char nome[50];
-        char endereco[100];
-        char telefone[20];
-        char email[50];
+        system("clear");
+        printf("0 - Sair\n1 - Registrar Hospital\n2 - Buscar Hospital\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
+        scanf("%i", &escolha);
+        if (escolha == 0)
+        {
+            system("cls");
+            printf("Saindo...");
+        }
+        else if (escolha == 1)
+        {
+            int id = 0;
+            char nome[50];
+            char endereco[100];
+            char telefone[20];
+            char email[50];
 
-        system("cls");
-        printf("Digite os seguintes dados em ordem e separado por virgula[ id, nome, endereco, telefone, email ]: ");
-        scanf("%i, %s, %s, %s, %s", &id, nome, endereco, telefone, email);
-        Hospital hospital = {id, nome, endereco, telefone, email};
-        salvarHospital(hospital);
-    }
+            system("clear");
+
+            printf("Digite o ID:");
+            scanf("%i", &id);
+            printf("Digite o Nome:");
+            scanf("%s", nome);
+            printf("Digite o Endereco:");
+            scanf("%s", endereco);
+            printf("Digite o Telefone:");
+            scanf("%s", telefone);
+            printf("Digite o Email:");
+            scanf("%s", email);
+
+            salvarHospital(id, nome, endereco, telefone, email);
+        }
+        else if (escolha == 2)
+        {
+            int id = 0;
+
+            printf("Digite o ID: ");
+            scanf("%i", &id);
+
+            Hospital h = buscarHospital(id);
+
+            printf("%s", h);
+            printf("ID: %i\n,Nome: %s\n,Endereco: %s\n,Telefone: %s\n,Email: %s\n", h.id, h.nome, h.endereco, h.telefone, h.email);
+        }
+    } while (escolha != 0);
 
     return 0;
 }
