@@ -150,9 +150,15 @@ int main()
             scanf("%i", &id);
 
             Hospital h = buscarHospital(id);
-
-            printf("%s", h);
-            printf("ID: %i\n,Nome: %s\n,Endereco: %s\n,Telefone: %s\n,Email: %s\n", h.id, h.nome, h.endereco, h.telefone, h.email);
+            if (h.id == -1)
+            {
+                printf("\n\nHospital nao encontrado\n");
+            }
+            else 
+            {
+                printf("Hospital encontrado\nHospital:\nId: %i\nNome: %s\nEndereco: %s\nTelefone: %s\nEmail: %s\n\n", h.id, h.nome, h.endereco, h.telefone, h.email);
+            }
+            escolha = 0;
         }
     } while (escolha != 0);
 
