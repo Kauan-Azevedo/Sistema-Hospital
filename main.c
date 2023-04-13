@@ -32,16 +32,7 @@ typedef struct
     char descricao[100];
 } Doenca;
 
-typedef struct
-{
-    int id;
-    char nome[50];
-    char sobrenome[50];
-    char cpf[20];
-    char telefone[20];
-    char email[50];
-    int id_clinica;
-} Funcionario;
+
 
 // void salvarHospital(Hospital hospital)
 void salvarHospital(int id, char nome[], char endereco[], char telefone[], char email[])
