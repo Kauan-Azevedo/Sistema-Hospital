@@ -60,24 +60,6 @@ Hospital buscarHospital(int id)
     return hospital;
 }
 
-void atualizarHospital(Hospital hospital)
-{
-    FILE *arquivo = fopen("hospitais.csv", "r+");
-    Hospital h;
-    long int posicao;
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%s\n", &h.id, h.nome, h.endereco, h.telefone, h.email) != EOF)
-    {
-        if (h.id == hospital.id)
-        {
-            posicao = ftell(arquivo) - strlen(h.nome) - strlen(h.endereco) - strlen(h.telefone) - strlen(h.email) - 17;
-            fseek(arquivo, posicao, SEEK_SET);
-            fprintf(arquivo, "%d;%s;%s;%s;%s\n", hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email);
-            break;
-        }
-    }
-    fclose(arquivo);
-}
-
 int main()
 {
     int escolha;
