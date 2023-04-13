@@ -78,24 +78,6 @@ void atualizarHospital(Hospital hospital)
     fclose(arquivo);
 }
 
-void excluirHospital(int id)
-{
-    FILE *arquivo = fopen("hospitais.csv", "r");
-    FILE *arquivo_temp = fopen("hospitais_temp.txt", "w");
-    Hospital hospital;
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email) != EOF)
-    {
-        if (hospital.id != id)
-        {
-            fprintf(arquivo_temp, "%d;%s;%s;%s;%s\n", hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email);
-        }
-    }
-    fclose(arquivo);
-    fclose(arquivo_temp);
-    remove("hospitais.txt");
-    rename("hospitais_temp.txt", "hospitais.txt");
-}
-
 int main()
 {
     int escolha;
