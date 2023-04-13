@@ -1,44 +1,73 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h> // SE LINUX
+// #include <windows.h> // SE WINDOWS
 typedef struct
 {
     int id;
     char nome[50];
     char endereco[100];
-    char telefone[20];
-    char email[50];
+    char cep[50];
 } Hospital;
 
 typedef struct
 {
     int id;
     char nome[50];
+    char endereco[150];
+    char cep[50];
+
     int id_hospital;
 } Clinica;
 
 typedef struct
 {
     int id;
-    char nome[50];
+    char nome[150];
+    char email[150];
+    char cpf[50];
+    char telefone[50];
+    char endereco[150];
     char especialidade[50];
+
     int id_clinica;
 } Medico;
 
 typedef struct
 {
     int id;
+    char nome[150];
+    char email[150];
+    char cpf[50];
+    char telefone[50];
+    char endereco[150];
+
+    int id_clinica;
+    int id_medico;
+    int id_doenca;
+} Paciente;
+
+typedef struct
+{
+    int id;
     char nome[50];
     char descricao[100];
+    int gravidade;
+
+    int id_paciente;
 } Doenca;
 
-
+void clear_message(char mensagem[])
+{
+    printf("%s", mensagem);
+}
 
 // void salvarHospital(Hospital hospital)
-void salvarHospital(int id, char nome[], char endereco[], char telefone[], char email[])
+void salvarHospital(int id, char nome[], char endereco[], char cep[])
 {
     FILE *arquivo = fopen("hospitais.csv", "a");
-    fprintf(arquivo, "%d;%s;%s;%s;%s\n", id, nome, endereco, telefone, email);
+    fprintf(arquivo, "%d;%s;%s;%s\n", id, nome, endereco, cep);
     fclose(arquivo);
 }
 
@@ -47,7 +76,7 @@ Hospital buscarHospital(int id)
     FILE *arquivo = fopen("hospitais.csv", "r");
     Hospital hospital;
 
-    while (fscanf(arquivo, "%i;%[^;];%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.telefone, hospital.email) != EOF)
+    while (fscanf(arquivo, "%i;%[^;];%[^;];%s\n", &hospital.id, hospital.nome, hospital.endereco, hospital.cep) != EOF)
     {
         if (hospital.id == id)
         {
@@ -63,6 +92,7 @@ Hospital buscarHospital(int id)
 int main()
 {
     int escolha;
+    char temp[1];
     printf("Bem-vindo,\nOque deseja fazer?\n");
     do
     {
@@ -79,23 +109,27 @@ int main()
             int id = 0;
             char nome[50];
             char endereco[100];
-            char telefone[20];
-            char email[50];
+            char cep[50];
 
             system("clear");
 
-            printf("Digite o ID:");
+            printf("(Hospital)Digite o ID:");
             scanf("%i", &id);
-            printf("Digite o Nome:");
-            scanf("%s", nome);
-            printf("Digite o Endereco:");
-            scanf("%s", endereco);
-            printf("Digite o Telefone:");
-            scanf("%s", telefone);
-            printf("Digite o Email:");
-            scanf("%s", email);
+            printf("(Hospital)Digite o Nome:");
+            scanf("%c", temp);
+            scanf("%[^\n]", nome);
+            printf("(Hospital)Digite o Endereco:");
+            scanf("%c", temp);
+            scanf("%[^\n]", endereco);
+            printf("(Hospital)Digite o CEP:");
+            scanf("%c", temp);
+            scanf("%s", cep);
 
-            salvarHospital(id, nome, endereco, telefone, email);
+            clear_message("Salvando Hospital.");
+            clear_message("Salvando Hospital..");
+            clear_message("Salvando Hospital...");
+
+            salvarHospital(id, nome, endereco, cep);
         }
         else if (escolha == 2)
         {
@@ -109,9 +143,12 @@ int main()
             {
                 printf("\n\nHospital nao encontrado\n");
             }
-            else 
+            else
             {
-                printf("Hospital encontrado\nHospital:\nId: %i\nNome: %s\nEndereco: %s\nTelefone: %s\nEmail: %s\n\n", h.id, h.nome, h.endereco, h.telefone, h.email);
+                sleep(1);
+                printf("Hospital encontrado");
+                sleep(1);
+                printf("\nHospital:\nId: %i\nNome: %s\nEndereco: %s\nCep: %s\n\n", h.id, h.nome, h.endereco, h.cep);
             }
             escolha = 0;
         }
