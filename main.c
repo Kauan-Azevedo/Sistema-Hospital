@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h> // SE LINUX
 // #include <windows.h> // SE WINDOWS
+#include <mysql/mysql.h>
+
 typedef struct
 {
     int id;
@@ -58,11 +60,6 @@ typedef struct
     int id_paciente;
 } Doenca;
 
-void clear_message(char mensagem[])
-{
-    printf("%s", mensagem);
-}
-
 // void salvarHospital(Hospital hospital)
 void salvarHospital(int id, char nome[], char endereco[], char cep[])
 {
@@ -91,9 +88,23 @@ Hospital buscarHospital(int id)
 
 int main()
 {
+    MYSQL *conexao = mysql_init(NULL);
+
+    if (!mysql_real_connect(conexao, "localhost", "root", "root", "sistema-hospital", 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conexao));
+        exit(1);
+    }
+    else
+    {
+        printf("Conectado ao banco de dados!\n");
+        sleep(2);
+    }
+
     int escolha;
     char temp[1];
-    printf("Bem-vindo,\nOque deseja fazer?\n");
+
+    printf("Bem-vindo,\no que deseja fazer?\n");
     do
     {
         system("clear");
@@ -113,8 +124,6 @@ int main()
 
             system("clear");
 
-            printf("(Hospital)Digite o ID:");
-            scanf("%i", &id);
             printf("(Hospital)Digite o Nome:");
             scanf("%c", temp);
             scanf("%[^\n]", nome);
@@ -125,12 +134,8 @@ int main()
             scanf("%c", temp);
             scanf("%s", cep);
 
-            clear_message("Salvando Hospital.");
-            clear_message("Salvando Hospital..");
-            clear_message("Salvando Hospital...");
-
             salvarHospital(id, nome, endereco, cep);
-        }
+                }
         else if (escolha == 2)
         {
             int id = 0;
