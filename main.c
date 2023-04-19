@@ -46,17 +46,17 @@ typedef struct
     int gravidade;
 } Doenca;
 
+char *server = "localhost";
+char *user = "root";
+char *password = "root";
+char *database = "pron1tuario_hospital";
+
 // void salvarHospital(Hospital hospital)
 void salvarHospital(char nome[], char endereco[], char cep[])
 {
     MYSQL *conn;
     MYSQL_RES *res;
     MYSQL_ROW row;
-
-    char *server = "localhost";
-    char *user = "root";
-    char *password = "root";
-    char *database = "sistema_hospital";
 
     conn = mysql_init(NULL);
 
@@ -76,8 +76,6 @@ void salvarHospital(char nome[], char endereco[], char cep[])
     }
 
     mysql_close(conn);
-
-    mysql_close(conn);
 }
 
 Hospital listarHospitais()
@@ -85,11 +83,6 @@ Hospital listarHospitais()
     MYSQL *conn;
     MYSQL_RES *res;
     MYSQL_ROW row;
-
-    char *server = "localhost";
-    char *user = "root";
-    char *password = "root";
-    char *database = "sistema_hospital";
 
     conn = mysql_init(NULL);
 
