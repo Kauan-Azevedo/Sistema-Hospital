@@ -46,7 +46,29 @@ typedef struct
     int gravidade;
 } Doenca;
 
-// void salvarHospital(Hospital hospital)
+void salvarClinica(char nomeHospital[], char nome[], char endereco[], char cep[])
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    char *server = "localhost";
+    char *user = "root";
+    char *password = "root";
+    char *database = "sistema_hospital";
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char query[1000];
+    sprintf(query, "");
+}
+
 void salvarHospital(char nome[], char endereco[], char cep[])
 {
     MYSQL *conn;
@@ -74,8 +96,6 @@ void salvarHospital(char nome[], char endereco[], char cep[])
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-
-    mysql_close(conn);
 
     mysql_close(conn);
 }
@@ -118,7 +138,7 @@ Hospital listarHospitais()
 int main()
 {
     int escolha;
-    char temp;
+    char temp[1];
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
@@ -137,13 +157,13 @@ inicio:
         char cep[50];
 
         printf("(Hospital)Digite o Nome: ");
-        scanf("%c", &temp);
+        scanf("%c", temp);
         scanf("%[^\n]", nome);
         printf("(Hospital)Digite o Endereco: ");
-        scanf("%c", &temp);
+        scanf("%c", temp);
         scanf("%[^\n]", endereco);
         printf("(Hospital)Digite o CEP: ");
-        scanf("%c", &temp);
+        scanf("%c", temp);
         scanf("%s", cep);
 
         salvarHospital(nome, endereco, cep);
