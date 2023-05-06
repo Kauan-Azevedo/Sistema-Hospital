@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h> // SE LINUX
-// #include <windows.h> // SE WINDOWS
 #include <mysql/mysql.h>
 
 #define MAX_STRING 300
@@ -46,28 +45,10 @@ typedef struct
     int gravidade;
 } Doenca;
 
-void salvarClinica(char nomeHospital[], char nome[], char endereco[], char cep[])
-{
-    MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
-
-    char *server = "localhost";
-    char *user = "root";
-    char *password = "root";
-    char *database = "sistema_hospital";
-
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
-    {
-        fprintf(stderr, "%s\n", mysql_error(conn));
-        exit(1);
-    }
-
-    char query[1000];
-    sprintf(query, "");
-}
+char *server = "localhost";
+char *user = "root";
+char *password = "root";
+char *database = "sistema-hospital";
 
 void salvarHospital(char nome[], char endereco[], char cep[])
 {
