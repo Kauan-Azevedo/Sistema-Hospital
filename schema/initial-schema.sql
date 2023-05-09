@@ -11,8 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema sistema-hospital
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `sistema-hospital` DEFAULT CHARACTER SET utf8 ;
-USE `sistema-hospital` ;
+CREATE SCHEMA IF NOT EXISTS `sistema_hospital` DEFAULT CHARACTER SET utf8 ;
 
 -- -----------------------------------------------------
 -- Table `sistema-hospital`.`Hospital`

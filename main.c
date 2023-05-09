@@ -76,7 +76,7 @@ void salvarHospital(char nome[], char endereco[], char cep[])
     mysql_close(conn);
 }
 
-Hospital listarHospitais()
+void listarHospitais()
 {
     MYSQL *conn;
     MYSQL_RES *res;
@@ -106,6 +106,32 @@ Hospital listarHospitais()
     mysql_close(conn);
 }
 
+void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char cep[])
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+    }
+    char query[1000];
+
+    if (nomeNovo[0] != "\0" && endereco[0] != "\0" && cep[0] != "\0")
+    {
+        sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+        if (mysql_query(conn, query))
+        {
+            fprintf(stderr, "%s\n", mysql_error(conn));
+            exit(1);
+        }
+        printf("\nDados alterados com sucesso!\n\n");
+    }
+}
+
 int main()
 {
     int escolha;
@@ -114,7 +140,7 @@ int main()
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
     // system("clear");
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -143,6 +169,30 @@ inicio:
     else if (escolha == 2)
     {
         listarHospitais();
+        goto inicio;
+    }
+    else if (escolha == 3)
+    {
+        char nomeAntigo[150];
+        char nomeNovo[150];
+        char endereco[100];
+        char cep[50];
+
+        printf("Nome do hospital: ");
+        scanf("%c", temp);
+        scanf("%s", nomeAntigo);
+
+        printf("[UPDATE](Hospital)Novo nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeNovo);
+        printf("[UPDATE](Hospital)Novo endereco: ");
+        scanf("%c", temp);
+        scanf("%s", endereco);
+        printf("[UPDATE](Hospital)Novo cep: ");
+        scanf("%c", temp);
+        scanf("%s", cep);
+
+        atualizarHospital(nomeAntigo, nomeNovo, endereco, cep);
         goto inicio;
     }
 
