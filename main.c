@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h> // SE LINUX
+#include <unistd.h>
 #include <mysql/mysql.h>
 
 #define MAX_STRING 300
