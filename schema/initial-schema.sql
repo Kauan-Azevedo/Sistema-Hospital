@@ -11,13 +11,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema sistema-hospital
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `sistema-hospital` DEFAULT CHARACTER SET utf8 ;
-USE `sistema-hospital` ;
+CREATE SCHEMA IF NOT EXISTS `sistema_hospital` DEFAULT CHARACTER SET utf8 ;
+USE `sistema_hospital` ;
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Hospital`
+-- Table `sistema_hospital`.`Hospital`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Hospital` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Hospital` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `endereco` VARCHAR(150) NOT NULL,
@@ -28,9 +28,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Clinica`
+-- Table `sistema_hospital`.`Clinica`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Clinica` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Clinica` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `endereco` VARCHAR(150) NOT NULL,
@@ -41,16 +41,16 @@ CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Clinica` (
   INDEX `fk_Clinica_Hospital_idx` (`Hospital_idHospital` ASC) VISIBLE,
   CONSTRAINT `fk_Clinica_Hospital`
     FOREIGN KEY (`Hospital_idHospital`)
-    REFERENCES `sistema-hospital`.`Hospital` (`id`)
+    REFERENCES `sistema_hospital`.`Hospital` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Medico`
+-- Table `sistema_hospital`.`Medico`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Medico` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Medico` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `email` VARCHAR(150) NOT NULL,
@@ -66,9 +66,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Paciente`
+-- Table `sistema_hospital`.`Paciente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Paciente` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Paciente` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `email` VARCHAR(150) NOT NULL,
@@ -83,9 +83,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Doenca`
+-- Table `sistema_hospital`.`Doenca`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Doenca` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Doenca` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
   `descricao` VARCHAR(250) NOT NULL,
@@ -97,9 +97,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Clinica_has_Doutor`
+-- Table `sistema_hospital`.`Clinica_has_Doutor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Clinica_has_Doutor` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Clinica_has_Doutor` (
   `Clinica_idClinica` INT NOT NULL,
   `Clinica_Hospital_idHospital` INT NOT NULL,
   `Doutor_idDoutor` INT NOT NULL,
@@ -108,21 +108,21 @@ CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Clinica_has_Doutor` (
   INDEX `fk_Clinica_has_Doutor_Clinica1_idx` (`Clinica_idClinica` ASC, `Clinica_Hospital_idHospital` ASC) VISIBLE,
   CONSTRAINT `fk_Clinica_has_Doutor_Clinica1`
     FOREIGN KEY (`Clinica_idClinica` , `Clinica_Hospital_idHospital`)
-    REFERENCES `sistema-hospital`.`Clinica` (`id` , `Hospital_idHospital`)
+    REFERENCES `sistema_hospital`.`Clinica` (`id` , `Hospital_idHospital`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Clinica_has_Doutor_Doutor1`
     FOREIGN KEY (`Doutor_idDoutor`)
-    REFERENCES `sistema-hospital`.`Medico` (`id`)
+    REFERENCES `sistema_hospital`.`Medico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Paciente_has_Clinica`
+-- Table `sistema_hospital`.`Paciente_has_Clinica`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Paciente_has_Clinica` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Paciente_has_Clinica` (
   `Paciente_idPaciente` INT NOT NULL,
   `Clinica_idClinica` INT NOT NULL,
   `Clinica_Hospital_idHospital` INT NOT NULL,
@@ -132,21 +132,21 @@ CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Paciente_has_Clinica` (
   INDEX `fk_Paciente_has_Clinica_Paciente1_idx` (`Paciente_idPaciente` ASC) VISIBLE,
   CONSTRAINT `fk_Paciente_has_Clinica_Paciente1`
     FOREIGN KEY (`Paciente_idPaciente`)
-    REFERENCES `sistema-hospital`.`Paciente` (`id`)
+    REFERENCES `sistema_hospital`.`Paciente` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Paciente_has_Clinica_Clinica1`
     FOREIGN KEY (`Clinica_idClinica` , `Clinica_Hospital_idHospital`)
-    REFERENCES `sistema-hospital`.`Clinica` (`id` , `Hospital_idHospital`)
+    REFERENCES `sistema_hospital`.`Clinica` (`id` , `Hospital_idHospital`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Doenca_has_Paciente`
+-- Table `sistema_hospital`.`Doenca_has_Paciente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Doenca_has_Paciente` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Doenca_has_Paciente` (
   `Doenca_idDoenca` INT NOT NULL,
   `Paciente_idPaciente` INT NOT NULL,
   PRIMARY KEY (`Doenca_idDoenca`, `Paciente_idPaciente`),
@@ -154,21 +154,21 @@ CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Doenca_has_Paciente` (
   INDEX `fk_Doenca_has_Paciente_Doenca1_idx` (`Doenca_idDoenca` ASC) VISIBLE,
   CONSTRAINT `fk_Doenca_has_Paciente_Doenca1`
     FOREIGN KEY (`Doenca_idDoenca`)
-    REFERENCES `sistema-hospital`.`Doenca` (`id`)
+    REFERENCES `sistema_hospital`.`Doenca` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Doenca_has_Paciente_Paciente1`
     FOREIGN KEY (`Paciente_idPaciente`)
-    REFERENCES `sistema-hospital`.`Paciente` (`id`)
+    REFERENCES `sistema_hospital`.`Paciente` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sistema-hospital`.`Prontuario`
+-- Table `sistema_hospital`.`Prontuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Prontuario` (
+CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Prontuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `data_visita` DATETIME NULL,
   `situacao_paciente` VARCHAR(450) NULL,
@@ -188,22 +188,22 @@ CREATE TABLE IF NOT EXISTS `sistema-hospital`.`Prontuario` (
   INDEX `fk_Prontuario_Clinica1_idx` (`Clinica_id` ASC, `Clinica_Hospital_idHospital` ASC) VISIBLE,
   CONSTRAINT `fk_Prontuario_Medico1`
     FOREIGN KEY (`Medico_id`)
-    REFERENCES `sistema-hospital`.`Medico` (`id`)
+    REFERENCES `sistema_hospital`.`Medico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Prontuario_Doenca1`
     FOREIGN KEY (`Doenca_id`)
-    REFERENCES `sistema-hospital`.`Doenca` (`id`)
+    REFERENCES `sistema_hospital`.`Doenca` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Prontuario_Paciente1`
     FOREIGN KEY (`Paciente_id`)
-    REFERENCES `sistema-hospital`.`Paciente` (`id`)
+    REFERENCES `sistema_hospital`.`Paciente` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Prontuario_Clinica1`
     FOREIGN KEY (`Clinica_id` , `Clinica_Hospital_idHospital`)
-    REFERENCES `sistema-hospital`.`Clinica` (`id` , `Hospital_idHospital`)
+    REFERENCES `sistema_hospital`.`Clinica` (`id` , `Hospital_idHospital`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
