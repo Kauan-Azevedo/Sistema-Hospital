@@ -48,7 +48,7 @@ typedef struct
 char *server = "localhost";
 char *user = "root";
 char *password = "root";
-char *database = "sistema-hospital";
+char *database = "sistema_hospital";
 
 void salvarHospital(char nome[], char endereco[], char cep[])
 {
@@ -120,7 +120,9 @@ void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char
     }
     char query[1000];
 
-    if (nomeNovo[0] != "\0" && endereco[0] != "\0" && cep[0] != "\0")
+    printf("");
+
+    if (nomeNovo[0] != "\0" || endereco[0] != "\0" || cep[0] != "\0")
     {
         sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
         if (mysql_query(conn, query))
