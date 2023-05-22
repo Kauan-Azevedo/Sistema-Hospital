@@ -2,48 +2,59 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <mysql/mysql.h>
+#include <mysql/mysql.h>'
 
 #define MAX_STRING 300
 typedef struct
 {
-    char nome[50];
-    char endereco[100];
-    char cep[50];
+    char nome[45];
+    char endereco[150];
+    char cep[10];
 } Hospital;
 
 typedef struct
 {
-    char nome[50];
+    char nome[45];
     char endereco[150];
-    char cep[50];
+    char cep[10];
+    int Hospital_idHospital;
 } Clinica;
 
 typedef struct
 {
     char nome[150];
     char email[150];
-    char cpf[50];
-    char telefone[50];
+    char cpf[11];
+    char telefone[11];
     char endereco[150];
-    char especialidade[50];
+    char especialidade[45];
 } Medico;
 
 typedef struct
 {
     char nome[150];
     char email[150];
-    char cpf[50];
-    char telefone[50];
+    char cpf[11];
+    char telefone[11];
     char endereco[150];
 } Paciente;
 
 typedef struct
 {
-    char nome[50];
-    char descricao[100];
+    char nome[45];
+    char descricao[250];
     int gravidade;
 } Doenca;
+
+typedef struct{
+    char descricao[700];
+    int Medico_id;
+    int Paciente_id;
+    int Hospital_id;
+    int Clinica_id;
+    int Doenca_id;
+    
+} Prontuario;
 
 char *server = "localhost";
 char *user = "root";
@@ -72,6 +83,7 @@ void salvarHospital(char nome[], char endereco[], char cep[])
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
+    printf("Dados inseridos com sucesso!\n\n");
 
     mysql_close(conn);
 }
@@ -120,18 +132,38 @@ void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char
     }
     char query[1000];
 
-    printf("");
-
-    if (nomeNovo[0] != "\0" || endereco[0] != "\0" || cep[0] != "\0")
+    sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+    if (mysql_query(conn, query))
     {
-        sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
-        if (mysql_query(conn, query))
-        {
-            fprintf(stderr, "%s\n", mysql_error(conn));
-            exit(1);
-        }
-        printf("\nDados alterados com sucesso!\n\n");
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
     }
+
+    printf("\nDados alterados com sucesso!\n\n");
+}
+
+void excluirHospital(char nome[])
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+    }
+    char query[1000];
+
+    sprintf(query, "DELETE FROM Hospital WHERE nome = '%s'", nome);
+    if (mysql_query(conn, query))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("\nDados excluidos com sucesso!\n\n");
 }
 
 int main()
@@ -142,7 +174,7 @@ int main()
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
     // system("clear");
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -182,19 +214,29 @@ inicio:
 
         printf("Nome do hospital: ");
         scanf("%c", temp);
-        scanf("%s", nomeAntigo);
-
+        scanf("%[^\n]", nomeAntigo);
         printf("[UPDATE](Hospital)Novo nome: ");
         scanf("%c", temp);
         scanf("%[^\n]", nomeNovo);
         printf("[UPDATE](Hospital)Novo endereco: ");
         scanf("%c", temp);
-        scanf("%s", endereco);
+        scanf("%[^\n]", endereco);
         printf("[UPDATE](Hospital)Novo cep: ");
         scanf("%c", temp);
-        scanf("%s", cep);
+        scanf("%[^\n]", cep);
 
         atualizarHospital(nomeAntigo, nomeNovo, endereco, cep);
+        goto inicio;
+    }
+    else if (escolha == 4)
+    {
+        char nome[150];
+
+        printf("Nome do hospital: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+
+        excluirHospital(nome);
         goto inicio;
     }
 
