@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <mysql/mysql.h>'
+#include <mysql/mysql.h>
 
 typedef struct
 {
@@ -63,11 +63,9 @@ char *user = "root";
 char *password = "root";
 char *database = "sistema_hospital";
 
-void salvarHospital(char nome[], char endereco[], char cep[])
+void adicionarHospital(char nome[], char endereco[], char cep[])
 {
     MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
 
     conn = mysql_init(NULL);
 
@@ -86,7 +84,6 @@ void salvarHospital(char nome[], char endereco[], char cep[])
         exit(1);
     }
     printf("Dados inseridos com sucesso!\n\n");
-
     mysql_close(conn);
 }
 
@@ -114,17 +111,13 @@ void listarHospitais()
         printf("Id: %s,\nNome: %s,\nEndereco: %s,\nCEP: %s\n\n", row[0], row[1], row[2], row[3]);
     }
     printf("+----- Fim - Hospitais -----+\n");
-
     mysql_free_result(res);
-
     mysql_close(conn);
 }
 
 void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char cep[])
 {
     MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
 
     conn = mysql_init(NULL);
 
@@ -140,15 +133,13 @@ void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-
     printf("\nDados alterados com sucesso!\n\n");
+    mysql_close(conn);
 }
 
 void excluirHospital(char nome[])
 {
     MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
 
     conn = mysql_init(NULL);
 
@@ -164,8 +155,62 @@ void excluirHospital(char nome[])
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-
     printf("\nDados excluidos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void adicionarClinica(char nome[], char endereco[], char cep[], char nomeHospital[])
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char selectQuery[1000];
+    sprintf(selectQuery, "SELECT id FROM Hospital WHERE nome = '%s'", nomeHospital);
+
+    if (mysql_query(conn, selectQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    res = mysql_use_result(conn);
+
+    int idHospital = -1;
+
+    if ((row = mysql_fetch_row(res)) != NULL)
+    {
+        idHospital = atoi(row[0]);
+    }
+    else
+    {
+        fprintf(stderr, "Hospital não encontrado\n");
+        mysql_free_result(res);
+        mysql_close(conn);
+        return;
+    }
+
+    mysql_free_result(res);
+
+    char query[1000];
+    sprintf(query, "INSERT INTO Clinica (nome, endereco, cep, Hospital_idHospital) VALUES ('%s', '%s', '%s', '%i')", nome, endereco, cep, idHospital);
+
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("Dados inseridos com sucesso!\n\n");
+    mysql_close(conn);
 }
 
 int main()
@@ -175,12 +220,10 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    // system("clear");
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
-        // system("clear");
         printf("\nSaindo...");
     }
     else if (escolha == 1)
@@ -199,7 +242,7 @@ inicio:
         scanf("%c", temp);
         scanf("%s", cep);
 
-        salvarHospital(nome, endereco, cep);
+        adicionarHospital(nome, endereco, cep);
         goto inicio;
     }
     else if (escolha == 2)
@@ -239,6 +282,34 @@ inicio:
         scanf("%[^\n]", nome);
 
         excluirHospital(nome);
+        goto inicio;
+    }
+    else if (escolha == 5)
+    {
+        char nome[50];
+        char endereco[100];
+        char cep[50];
+        char nomeHospital[150];
+
+        printf("(Clinica)Digite o Nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+        printf("(Clinica)Digite o Endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", endereco);
+        printf("(Clinica)Digite o CEP: ");
+        scanf("%c", temp);
+        scanf("%s", cep);
+        printf("(Clinica)Digite o Nome do Hospital: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeHospital);
+
+        adicionarClinica(nome, endereco, cep, nomeHospital);
+        goto inicio;
+    }
+    else if (escolha == 6)
+    {
+        listartClinicas();
         goto inicio;
     }
 
