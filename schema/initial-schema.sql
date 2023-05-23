@@ -170,7 +170,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Prontuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `data_visita` DATETIME NULL,
+  `data_visita` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `situacao_paciente` VARCHAR(450) NULL,
   `historico_familiar` VARCHAR(500) NULL,
   `alergias` VARCHAR(400) NULL,
