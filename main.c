@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <mysql/mysql.h>'
 
-#define MAX_STRING 300
 typedef struct
 {
     char nome[150];
