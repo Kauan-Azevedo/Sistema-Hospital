@@ -195,7 +195,6 @@ void adicionarClinica(char nome[], char endereco[], char cep[], char nomeHospita
         fprintf(stderr, "Hospital não encontrado\n");
         mysql_free_result(res);
         mysql_close(conn);
-        return;
     }
 
     mysql_free_result(res);
@@ -254,6 +253,13 @@ void atualizarClinica(char nomeAntigo[], char nomeNovo[], char endereco[], char 
     char query[1000];
 
     sprintf(query, "UPDATE Clinica SET nome = '%s', endereco = '%s', cep = '%s' Where nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+    if (mysql_query(conn, query))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("\nDados alterados com sucesso!\n\n");
+    mysql_close(conn);
 }
 
 int main()
@@ -263,7 +269,7 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Excluir Clinica\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Atualizar Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
