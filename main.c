@@ -146,16 +146,26 @@ void excluirHospital(char nome[])
     if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
     }
-    char query[1000];
 
-    sprintf(query, "DELETE FROM Hospital WHERE nome = '%s'", nome);
-    if (mysql_query(conn, query))
+    char deleteClinicasQuery[1000];
+    sprintf(deleteClinicasQuery, "DELETE FROM Clinica WHERE Hospital_idHospital = (SELECT id FROM Hospital WHERE nome = '%s')", nome);
+    if (mysql_query(conn, deleteClinicasQuery) != 0)
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-    printf("\nDados excluidos com sucesso!\n\n");
+
+    char deleteHospitalQuery[1000];
+    sprintf(deleteHospitalQuery, "DELETE FROM Hospital WHERE nome = '%s'", nome);
+    if (mysql_query(conn, deleteHospitalQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("Dados excluídos com sucesso!\n\n");
     mysql_close(conn);
 }
 
