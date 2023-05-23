@@ -241,6 +241,21 @@ void listarClinicas()
     mysql_close(conn);
 }
 
+void atualizarClinica(char nomeAntigo[], char nomeNovo[], char endereco[], char cep[])
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+    }
+    char query[1000];
+
+    sprintf(query, "UPDATE Clinica SET nome = '%s', endereco = '%s', cep = '%s' Where nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+}
+
 int main()
 {
     int escolha;
@@ -248,7 +263,7 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Excluir Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -338,6 +353,29 @@ inicio:
     else if (escolha == 6)
     {
         listarClinicas();
+        goto inicio;
+    }
+    else if (escolha == 7)
+    {
+        char nomeAntigo[150];
+        char nomeNovo[150];
+        char endereco[100];
+        char cep[50];
+
+        printf("Nome da Clinica: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeAntigo);
+        printf("[UPDATE](Clinica)Novo nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeNovo);
+        printf("[UPDATE](Clinica)Novo endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", endereco);
+        printf("[UPDATE](Clinica)Novo cep: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", cep);
+
+        atualizarClinica(nomeAntigo, nomeNovo, endereco, cep);
         goto inicio;
     }
 
