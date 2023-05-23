@@ -7,16 +7,16 @@
 #define MAX_STRING 300
 typedef struct
 {
-    char nome[45];
+    char nome[150];
     char endereco[150];
-    char cep[10];
+    char cep[11];
 } Hospital;
 
 typedef struct
 {
-    char nome[45];
+    char nome[150];
     char endereco[150];
-    char cep[10];
+    char cep[11];
     int Hospital_idHospital;
 } Clinica;
 
@@ -24,36 +24,39 @@ typedef struct
 {
     char nome[150];
     char email[150];
-    char cpf[11];
-    char telefone[11];
+    char cpf[15];
+    char telefone[15];
     char endereco[150];
-    char especialidade[45];
+    char especialidade[50];
 } Medico;
 
 typedef struct
 {
     char nome[150];
     char email[150];
-    char cpf[11];
-    char telefone[11];
+    char cpf[15];
+    char telefone[15];
     char endereco[150];
 } Paciente;
 
 typedef struct
 {
-    char nome[45];
+    char nome[150];
     char descricao[250];
     int gravidade;
 } Doenca;
 
-typedef struct{
-    char descricao[700];
+typedef struct
+{
+    char situacao_paciente[450];
+    char historico_familiar[500];
+    char alergias[400];
+    char medicacoes[400];
     int Medico_id;
-    int Paciente_id;
-    int Hospital_id;
-    int Clinica_id;
     int Doenca_id;
-    
+    int Paciente_id;
+    int Clinica_id;
+    int Clinica_Hospital_idHospital;
 } Prontuario;
 
 char *server = "localhost";
