@@ -272,6 +272,30 @@ void atualizarClinica(char nomeAntigo[], char nomeNovo[], char endereco[], char 
     mysql_close(conn);
 }
 
+void excluirClinica(char nome[])
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char deleteQuery[1000];
+    sprintf(deleteQuery, "DELETE FROM Clinica WHERE nome = '%s'", nome);
+    if (mysql_query(conn, deleteQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("Dados excluídos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
 int main()
 {
     int escolha;
@@ -279,7 +303,7 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Atualizar Clinica\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Atualizar Clinica\n8 - Excluir Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -394,6 +418,21 @@ inicio:
         atualizarClinica(nomeAntigo, nomeNovo, endereco, cep);
         goto inicio;
     }
+    else if (escolha == 8)
+    {
+        char nome[150];
 
+        printf("Nome da clinica: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+
+        excluirClinica(nome);
+        goto inicio;
+    }
+    else
+    {
+        printf("Valor Invalido!");
+        goto inicio;
+    }
     return 0;
 }
