@@ -108,7 +108,7 @@ void listarHospitais()
     printf("\n+----- Hospitais -----+\n\n");
     while ((row = mysql_fetch_row(res)) != NULL)
     {
-        printf("Id: %s,\nNome: %s,\nEndereco: %s,\nCEP: %s\n\n", row[0], row[1], row[2], row[3]);
+        printf("Id: %s,\nNome: %s,\nEndereco: %s,\nCEP: %s;\n\n", row[0], row[1], row[2], row[3]);
     }
     printf("+----- Fim - Hospitais -----+\n");
     mysql_free_result(res);
@@ -213,6 +213,34 @@ void adicionarClinica(char nome[], char endereco[], char cep[], char nomeHospita
     mysql_close(conn);
 }
 
+void listarClinicas()
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    mysql_query(conn, "SELECT * FROM Clinica");
+
+    res = mysql_store_result(conn);
+
+    printf("\n+----- Clinicas -----+\n\n");
+    while ((row = mysql_fetch_row(res)) != NULL)
+    {
+        printf("Id: %s,\nNome: %s,\nEndereco: %s,\nCEP: %s,\nId do Hospital: %s;\n\n", row[0], row[1], row[2], row[3], row[4]);
+    }
+    printf("+----- Fim - Clinicas -----+\n");
+    mysql_free_result(res);
+    mysql_close(conn);
+}
+
 int main()
 {
     int escolha;
@@ -220,7 +248,7 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\nEscolha: ");
+    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -309,7 +337,7 @@ inicio:
     }
     else if (escolha == 6)
     {
-        listartClinicas();
+        listarClinicas();
         goto inicio;
     }
 
