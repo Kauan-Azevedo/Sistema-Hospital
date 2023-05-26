@@ -303,11 +303,51 @@ int main()
 
     printf("Bem-vindo,\no que deseja fazer?\n");
 inicio:
-    printf("0 - Sair\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\n5 - Registrar Clinica\n6 - Listar Clinicas\n7 - Atualizar Clinica\n8 - Excluir Clinica\nEscolha: ");
+    printf("0 - Sair\n1 - Gerenciar Hospitais\n2 - Gerenciar Clinicas\n3 - Gerenciar Medicos\n4 - Gerenciar Pacientes\n5 - Gerenciar Doencas\n6 - Gerenciar Prontuarios\nEscolha: ");
+    scanf("%i", &escolha);
+
+    if (escolha == 0)
+    {
+        printf("Ate mais!");
+        exit(0);
+    }
+    else if (escolha == 1)
+    {
+        goto gerenc_hospitais;
+    }
+    else if (escolha == 2)
+    {
+        goto gerenc_clinicas;
+    }
+    else if (escolha == 3)
+    {
+        goto gerenc_medicos;
+    }
+    else if (escolha == 4)
+    {
+        goto gerenc_pacientes;
+    }
+    else if (escolha == 5)
+    {
+        goto gerenc_doencas;
+    }
+    else if (escolha == 6)
+    {
+        goto gerenc_prontuarios;
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto inicio;
+    }
+
+gerenc_hospitais:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Procurar Hospital\n4 - Atualizar Hospital\n5 - Excluir Hospital\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
-        printf("\nSaindo...");
+        goto inicio;
     }
     else if (escolha == 1)
     {
@@ -326,14 +366,19 @@ inicio:
         scanf("%s", cep);
 
         adicionarHospital(nome, endereco, cep);
-        goto inicio;
+        goto gerenc_hospitais;
     }
     else if (escolha == 2)
     {
         listarHospitais();
-        goto inicio;
+        goto gerenc_hospitais;
     }
     else if (escolha == 3)
+    {
+        printf("WIP");
+        goto gerenc_hospitais;
+    }
+    else if (escolha == 4)
     {
         char nomeAntigo[150];
         char nomeNovo[150];
@@ -354,9 +399,9 @@ inicio:
         scanf("%[^\n]", cep);
 
         atualizarHospital(nomeAntigo, nomeNovo, endereco, cep);
-        goto inicio;
+        goto gerenc_hospitais;
     }
-    else if (escolha == 4)
+    else if (escolha == 5)
     {
         char nome[150];
 
@@ -365,9 +410,23 @@ inicio:
         scanf("%[^\n]", nome);
 
         excluirHospital(nome);
+        goto gerenc_hospitais;
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto gerenc_hospitais;
+    }
+
+gerenc_clinicas:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Clinica\n2 - Listar Clinicas\n3 - Procurar Clinica\n4 - Atualizar Clinica\n5 - Excluir Clinica\nEscolha: ");
+    scanf("%i", &escolha);
+    if (escolha == 0)
+    {
         goto inicio;
     }
-    else if (escolha == 5)
+    else if (escolha == 1)
     {
         char nome[50];
         char endereco[100];
@@ -388,14 +447,14 @@ inicio:
         scanf("%[^\n]", nomeHospital);
 
         adicionarClinica(nome, endereco, cep, nomeHospital);
-        goto inicio;
+        goto gerenc_clinicas;
     }
-    else if (escolha == 6)
+    else if (escolha == 2)
     {
         listarClinicas();
-        goto inicio;
+        goto gerenc_clinicas;
     }
-    else if (escolha == 7)
+    else if (escolha == 3)
     {
         char nomeAntigo[150];
         char nomeNovo[150];
@@ -416,9 +475,9 @@ inicio:
         scanf("%[^\n]", cep);
 
         atualizarClinica(nomeAntigo, nomeNovo, endereco, cep);
-        goto inicio;
+        goto gerenc_clinicas;
     }
-    else if (escolha == 8)
+    else if (escolha == 4)
     {
         char nome[150];
 
@@ -427,12 +486,133 @@ inicio:
         scanf("%[^\n]", nome);
 
         excluirClinica(nome);
-        goto inicio;
+        goto gerenc_clinicas;
     }
     else
     {
-        printf("Valor Invalido!");
+        printf("Valor invalido!!");
+        goto gerenc_clinicas;
+    }
+
+gerenc_medicos:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Medico\n2 - Listar Medicos\n3 - Procurar Medico\n4 - Atualizar Medico\n5 - Excluir Medico\nEscolha: ");
+    scanf("%i", &escolha);
+    if (escolha == 0)
+    {
         goto inicio;
     }
+    else if (escolha == 1)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 2)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 3)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 4)
+    {
+        printf("WIP");
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto gerenc_medicos;
+    }
+
+gerenc_pacientes:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Paciente\n2 - Listar Pacientes\n3 - Procurar Paciente\n4 - Atualizar Paciente\n5 - Excluir Paciente\nEscolha: ");
+    scanf("%i", &escolha);
+    if (escolha == 0)
+    {
+        goto inicio;
+    }
+    else if (escolha == 1)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 2)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 3)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 4)
+    {
+        printf("WIP");
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto gerenc_pacientes;
+    }
+
+gerenc_doencas:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Doenca\n2 - Listar Doencas\n3 - Procurar Doenca\n4 - Atualizar Doenca\n5 - Excluir Doenca\nEscolha: ");
+    scanf("%i", &escolha);
+    if (escolha == 0)
+    {
+        goto inicio;
+    }
+    else if (escolha == 1)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 2)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 3)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 4)
+    {
+        printf("WIP");
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto gerenc_doencas;
+    }
+
+gerenc_prontuarios:
+    system("clear");
+    printf("\n0 - Voltar\n1 - Registrar Prontuario\n2 - Listar Prontuarios\n3 - Procurar Prontuario\n4 - Atualizar Prontuario\n5 - Excluir Prontuario\nEscolha: ");
+    scanf("%i", &escolha);
+    if (escolha == 0)
+    {
+        goto inicio;
+    }
+    else if (escolha == 1)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 2)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 3)
+    {
+        printf("WIP");
+    }
+    else if (escolha == 4)
+    {
+        printf("WIP");
+    }
+    else
+    {
+        printf("Valor invalido!!");
+        goto gerenc_prontuarios;
+    }
+
     return 0;
 }
