@@ -322,6 +322,7 @@ void listarMedicos()
 {
     MYSQL *conn;
     MYSQL_RES *res;
+    MYSQL_ROW row;
 
     conn = mysql_init(NULL);
     if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
@@ -334,9 +335,9 @@ void listarMedicos()
     res = mysql_store_result(conn);
 
     printf("\n+----- Medicos -----+\n\n");
-    while ((res = mysql_fetch_row(res)) != NULL)
+    while ((row = mysql_fetch_row(res)) != NULL)
     {
-        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s,\nEspecialidade: %s;\n\n", res[0], res[1], res[2], res[3], res[4], res[5], res[6]);
+        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s,\nEspecialidade: %s;\n\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
     }
     printf("+----- Fim - Medicos -----+\n");
     mysql_free_result(res);
@@ -575,7 +576,7 @@ gerenc_medicos:
     }
     else if (escolha == 2)
     {
-        printf("WIP");
+        listarMedicos();
         goto gerenc_medicos;
     }
     else if (escolha == 3)
