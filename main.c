@@ -296,6 +296,53 @@ void excluirClinica(char nome[])
     mysql_close(conn);
 }
 
+void adicionarMedico(Medico medico)
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+    sprintf(query, "INSERT INTO Medico (nome, email, cpf, telefone, endereco, especializacao) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", medico.nome, medico.email, medico.cpf, medico.telefone, medico.endereco, medico.especialidade);
+
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("Dados inseridos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void listarMedicos()
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    mysql_query(conn, "SELECT * FROM Medico");
+    res = mysql_store_result(conn);
+
+    printf("\n+----- Medicos -----+\n\n");
+    while ((res = mysql_fetch_row(res)) != NULL)
+    {
+        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s,\nEspecialidade: %s;\n\n", res[0], res[1], res[2], res[3], res[4], res[5], res[6]);
+    }
+    printf("+----- Fim - Medicos -----+\n");
+    mysql_free_result(res);
+    mysql_close(conn);
+}
+
 int main()
 {
     int escolha;
@@ -342,7 +389,6 @@ inicio:
     }
 
 gerenc_hospitais:
-    system("clear");
     printf("\n0 - Voltar\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Procurar Hospital\n4 - Atualizar Hospital\n5 - Excluir Hospital\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
@@ -419,7 +465,6 @@ gerenc_hospitais:
     }
 
 gerenc_clinicas:
-    system("clear");
     printf("\n0 - Voltar\n1 - Registrar Clinica\n2 - Listar Clinicas\n3 - Procurar Clinica\n4 - Atualizar Clinica\n5 - Excluir Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
@@ -495,8 +540,8 @@ gerenc_clinicas:
     }
 
 gerenc_medicos:
-    system("clear");
-    printf("\n0 - Voltar\n1 - Registrar Medico\n2 - Listar Medicos\n3 - Procurar Medico\n4 - Atualizar Medico\n5 - Excluir Medico\nEscolha: ");
+    printf("\n+----- Gerenciando Medicos -----+\n\n");
+    printf("0 - Voltar\n1 - Registrar Medico\n2 - Listar Medicos\n3 - Procurar Medico\n4 - Atualizar Medico\n5 - Excluir Medico\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -504,19 +549,44 @@ gerenc_medicos:
     }
     else if (escolha == 1)
     {
-        printf("WIP");
+        Medico dados;
+
+        printf("(Medico)Digite o Nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.nome);
+        printf("(Medico)Digite o Email: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.email);
+        printf("(Medico)Digite o CPF: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.cpf);
+        printf("(Medico)Digite o telefone: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.telefone);
+        printf("(Medico)Digite o endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.endereco);
+        printf("(Medico)Digite a especializacao: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", dados.especialidade);
+
+        adicionarMedico(dados);
+        goto gerenc_medicos;
     }
     else if (escolha == 2)
     {
         printf("WIP");
+        goto gerenc_medicos;
     }
     else if (escolha == 3)
     {
         printf("WIP");
+        goto gerenc_medicos;
     }
     else if (escolha == 4)
     {
         printf("WIP");
+        goto gerenc_medicos;
     }
     else
     {
@@ -525,7 +595,6 @@ gerenc_medicos:
     }
 
 gerenc_pacientes:
-    system("clear");
     printf("\n0 - Voltar\n1 - Registrar Paciente\n2 - Listar Pacientes\n3 - Procurar Paciente\n4 - Atualizar Paciente\n5 - Excluir Paciente\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
@@ -555,7 +624,6 @@ gerenc_pacientes:
     }
 
 gerenc_doencas:
-    system("clear");
     printf("\n0 - Voltar\n1 - Registrar Doenca\n2 - Listar Doencas\n3 - Procurar Doenca\n4 - Atualizar Doenca\n5 - Excluir Doenca\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
@@ -585,7 +653,6 @@ gerenc_doencas:
     }
 
 gerenc_prontuarios:
-    system("clear");
     printf("\n0 - Voltar\n1 - Registrar Prontuario\n2 - Listar Prontuarios\n3 - Procurar Prontuario\n4 - Atualizar Prontuario\n5 - Excluir Prontuario\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
