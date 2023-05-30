@@ -63,7 +63,7 @@ char *user = "root";
 char *password = "root";
 char *database = "sistema_hospital";
 
-void adicionarHospital(char nome[], char endereco[], char cep[])
+void adicionarHospital(Hospital hospital)
 {
     MYSQL *conn;
 
@@ -76,7 +76,7 @@ void adicionarHospital(char nome[], char endereco[], char cep[])
     }
 
     char query[1000];
-    sprintf(query, "INSERT INTO Hospital (nome, endereco, cep) VALUES ('%s', '%s', '%s')", nome, endereco, cep);
+    sprintf(query, "INSERT INTO Hospital (nome, endereco, cep) VALUES ('%s', '%s', '%s')", hospital.nome, hospital.endereco, hospital.cep);
 
     if (mysql_query(conn, query))
     {
@@ -115,7 +115,7 @@ void listarHospitais()
     mysql_close(conn);
 }
 
-void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char cep[])
+void atualizarHospital(char nomeAntigo[], Hospital hospital)
 {
     MYSQL *conn;
 
@@ -127,7 +127,7 @@ void atualizarHospital(char nomeAntigo[], char nomeNovo[], char endereco[], char
     }
     char query[1000];
 
-    sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+    sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", hospital.nome, hospital.endereco, hospital.cep, nomeAntigo);
     if (mysql_query(conn, query))
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
@@ -169,7 +169,7 @@ void excluirHospital(char nome[])
     mysql_close(conn);
 }
 
-void adicionarClinica(char nome[], char endereco[], char cep[], char nomeHospital[])
+void adicionarClinica(Clinica clinica, char nomeHospital[])
 {
     MYSQL *conn;
     MYSQL_RES *res;
@@ -210,7 +210,7 @@ void adicionarClinica(char nome[], char endereco[], char cep[], char nomeHospita
     mysql_free_result(res);
 
     char query[1000];
-    sprintf(query, "INSERT INTO Clinica (nome, endereco, cep, Hospital_idHospital) VALUES ('%s', '%s', '%s', '%i')", nome, endereco, cep, idHospital);
+    sprintf(query, "INSERT INTO Clinica (nome, endereco, cep, Hospital_idHospital) VALUES ('%s', '%s', '%s', '%i')", clinica.nome, clinica.endereco, clinica.cep, idHospital);
 
     if (mysql_query(conn, query) != 0)
     {
@@ -250,7 +250,7 @@ void listarClinicas()
     mysql_close(conn);
 }
 
-void atualizarClinica(char nomeAntigo[], char nomeNovo[], char endereco[], char cep[])
+void atualizarClinica(char nomeAntigo[], Clinica clinica)
 {
     MYSQL *conn;
 
@@ -262,7 +262,7 @@ void atualizarClinica(char nomeAntigo[], char nomeNovo[], char endereco[], char 
     }
     char query[1000];
 
-    sprintf(query, "UPDATE Clinica SET nome = '%s', endereco = '%s', cep = '%s' Where nome = '%s'", nomeNovo, endereco, cep, nomeAntigo);
+    sprintf(query, "UPDATE Clinica SET nome = '%s', endereco = '%s', cep = '%s' Where nome = '%s'", clinica.nome, clinica.endereco, clinica.cep, nomeAntigo);
     if (mysql_query(conn, query))
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
@@ -398,21 +398,19 @@ gerenc_hospitais:
     }
     else if (escolha == 1)
     {
-        char nome[50];
-        char endereco[100];
-        char cep[50];
+        Hospital hospital;
 
         printf("(Hospital)Digite o Nome: ");
         scanf("%c", temp);
-        scanf("%[^\n]", nome);
+        scanf("%[^\n]", hospital.nome);
         printf("(Hospital)Digite o Endereco: ");
         scanf("%c", temp);
-        scanf("%[^\n]", endereco);
+        scanf("%[^\n]", hospital.endereco);
         printf("(Hospital)Digite o CEP: ");
         scanf("%c", temp);
-        scanf("%s", cep);
+        scanf("%s", hospital.cep);
 
-        adicionarHospital(nome, endereco, cep);
+        adicionarHospital(hospital);
         goto gerenc_hospitais;
     }
     else if (escolha == 2)
@@ -428,24 +426,22 @@ gerenc_hospitais:
     else if (escolha == 4)
     {
         char nomeAntigo[150];
-        char nomeNovo[150];
-        char endereco[100];
-        char cep[50];
+        Hospital hospital;
 
         printf("Nome do hospital: ");
         scanf("%c", temp);
         scanf("%[^\n]", nomeAntigo);
         printf("[UPDATE](Hospital)Novo nome: ");
         scanf("%c", temp);
-        scanf("%[^\n]", nomeNovo);
+        scanf("%[^\n]", hospital.nome);
         printf("[UPDATE](Hospital)Novo endereco: ");
         scanf("%c", temp);
-        scanf("%[^\n]", endereco);
+        scanf("%[^\n]", hospital.endereco);
         printf("[UPDATE](Hospital)Novo cep: ");
         scanf("%c", temp);
-        scanf("%[^\n]", cep);
+        scanf("%[^\n]", hospital.cep);
 
-        atualizarHospital(nomeAntigo, nomeNovo, endereco, cep);
+        atualizarHospital(nomeAntigo, hospital);
         goto gerenc_hospitais;
     }
     else if (escolha == 5)
@@ -466,7 +462,7 @@ gerenc_hospitais:
     }
 
 gerenc_clinicas:
-    printf("\n0 - Voltar\n1 - Registrar Clinica\n2 - Listar Clinicas\n3 - Procurar Clinica\n4 - Atualizar Clinica\n5 - Excluir Clinica\nEscolha: ");
+    printf("\n0 - Voltar\n1 - Registrar Clinica\n2 - Listar Clinicas\n3 - Atualizar Clinica\n4 - Excluir Clinica\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -474,25 +470,23 @@ gerenc_clinicas:
     }
     else if (escolha == 1)
     {
-        char nome[50];
-        char endereco[100];
-        char cep[50];
+        Clinica clinica;
         char nomeHospital[150];
 
         printf("(Clinica)Digite o Nome: ");
         scanf("%c", temp);
-        scanf("%[^\n]", nome);
+        scanf("%[^\n]", clinica.nome);
         printf("(Clinica)Digite o Endereco: ");
         scanf("%c", temp);
-        scanf("%[^\n]", endereco);
+        scanf("%[^\n]", clinica.endereco);
         printf("(Clinica)Digite o CEP: ");
         scanf("%c", temp);
-        scanf("%s", cep);
+        scanf("%s", clinica.cep);
         printf("(Clinica)Digite o Nome do Hospital: ");
         scanf("%c", temp);
         scanf("%[^\n]", nomeHospital);
 
-        adicionarClinica(nome, endereco, cep, nomeHospital);
+        adicionarClinica(clinica, nomeHospital);
         goto gerenc_clinicas;
     }
     else if (escolha == 2)
@@ -503,24 +497,22 @@ gerenc_clinicas:
     else if (escolha == 3)
     {
         char nomeAntigo[150];
-        char nomeNovo[150];
-        char endereco[100];
-        char cep[50];
+        Clinica clinica;
 
         printf("Nome da Clinica: ");
         scanf("%c", temp);
         scanf("%[^\n]", nomeAntigo);
         printf("[UPDATE](Clinica)Novo nome: ");
         scanf("%c", temp);
-        scanf("%[^\n]", nomeNovo);
+        scanf("%[^\n]", clinica.nome);
         printf("[UPDATE](Clinica)Novo endereco: ");
         scanf("%c", temp);
-        scanf("%[^\n]", endereco);
+        scanf("%[^\n]", clinica.endereco);
         printf("[UPDATE](Clinica)Novo cep: ");
         scanf("%c", temp);
-        scanf("%[^\n]", cep);
+        scanf("%[^\n]", clinica.cep);
 
-        atualizarClinica(nomeAntigo, nomeNovo, endereco, cep);
+        atualizarClinica(nomeAntigo, clinica);
         goto gerenc_clinicas;
     }
     else if (escolha == 4)
@@ -542,7 +534,7 @@ gerenc_clinicas:
 
 gerenc_medicos:
     printf("\n+----- Gerenciando Medicos -----+\n\n");
-    printf("0 - Voltar\n1 - Registrar Medico\n2 - Listar Medicos\n3 - Procurar Medico\n4 - Atualizar Medico\n5 - Excluir Medico\nEscolha: ");
+    printf("0 - Voltar\n1 - Registrar Medico\n2 - Listar Medicos\n3 - Atualizar Medico\n4 - Excluir Medico\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -550,28 +542,28 @@ gerenc_medicos:
     }
     else if (escolha == 1)
     {
-        Medico dados;
+        Medico medico;
 
         printf("(Medico)Digite o Nome: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.nome);
+        scanf("%[^\n]", medico.nome);
         printf("(Medico)Digite o Email: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.email);
+        scanf("%[^\n]", medico.email);
         printf("(Medico)Digite o CPF: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.cpf);
+        scanf("%[^\n]", medico.cpf);
         printf("(Medico)Digite o telefone: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.telefone);
+        scanf("%[^\n]", medico.telefone);
         printf("(Medico)Digite o endereco: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.endereco);
+        scanf("%[^\n]", medico.endereco);
         printf("(Medico)Digite a especializacao: ");
         scanf("%c", temp);
-        scanf("%[^\n]", dados.especialidade);
+        scanf("%[^\n]", medico.especialidade);
 
-        adicionarMedico(dados);
+        adicionarMedico(medico);
         goto gerenc_medicos;
     }
     else if (escolha == 2)
@@ -581,12 +573,32 @@ gerenc_medicos:
     }
     else if (escolha == 3)
     {
-        printf("WIP");
-        goto gerenc_medicos;
-    }
-    else if (escolha == 4)
-    {
-        printf("WIP");
+        char nomeAntigo[150];
+        Medico medico;
+
+        printf("Nome do medico: ");
+        scanf("%c", temp);
+
+        scanf("%[^\n]", nomeAntigo);
+        printf("[UPDATE](Medico)Novo nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.nome);
+        printf("[UPDATE](Medico)Novo email: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.email);
+        printf("[UPDATE](Medico)Novo cpf: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.cpf);
+        printf("[UPDATE](Medico)Novo telefone: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.telefone);
+        printf("[UPDATE](Medico)Novo endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.endereco);
+        printf("[UPDATE](Medico)Nova especializacao: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", medico.especialidade);
+
         goto gerenc_medicos;
     }
     else
