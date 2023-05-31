@@ -26,7 +26,7 @@ typedef struct
     char cpf[15];
     char telefone[15];
     char endereco[150];
-    char especialidade[50];
+    char especializacao[50];
 } Medico;
 
 typedef struct
@@ -253,12 +253,12 @@ void listarClinicas()
 void atualizarClinica(char nomeAntigo[], Clinica clinica)
 {
     MYSQL *conn;
-
     conn = mysql_init(NULL);
 
     if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
     }
     char query[1000];
 
@@ -307,7 +307,7 @@ void adicionarMedico(Medico medico)
         exit(1);
     }
     char query[1000];
-    sprintf(query, "INSERT INTO Medico (nome, email, cpf, telefone, endereco, especializacao) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", medico.nome, medico.email, medico.cpf, medico.telefone, medico.endereco, medico.especialidade);
+    sprintf(query, "INSERT INTO Medico (nome, email, cpf, telefone, endereco, especializacao) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", medico.nome, medico.email, medico.cpf, medico.telefone, medico.endereco, medico.especializacao);
 
     if (mysql_query(conn, query) != 0)
     {
@@ -337,10 +337,131 @@ void listarMedicos()
     printf("\n+----- Medicos -----+\n\n");
     while ((row = mysql_fetch_row(res)) != NULL)
     {
-        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s,\nEspecialidade: %s;\n\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s,\nEspecializacao: %s;\n\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
     }
     printf("+----- Fim - Medicos -----+\n");
     mysql_free_result(res);
+    mysql_close(conn);
+}
+
+void atualizarMedico(char nomeAntigo[], Medico medico)
+{
+    MYSQL *conn;
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+
+    sprintf(query, "UPDATE Medico SET nome = '%s', email = '%s', cpf = '%s', telefone = '%s', endereco = '%s', especializacao = '%s' WHERE nome = '%s'", medico.nome, medico.email, medico.cpf, medico.telefone, medico.endereco, medico.especializacao, nomeAntigo);
+
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("\nDados alterados com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void excluirMedico(char nome[])
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char deleteQuery[1000];
+    sprintf(deleteQuery, "DELETE FROM Medico WHERE nome = '%s'", nome);
+    if (mysql_query(conn, deleteQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("Dados excluídos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void adicionarPaciente(Paciente paciente)
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+    sprintf(query, "INSERT INTO Paciente (nome, email, cpf, telefone, endereco) VALUES ('%s', '%s', '%s', '%s', '%s')", paciente.nome, paciente.email, paciente.cpf, paciente.telefone, paciente.endereco);
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("Dados inseridos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void listarPacientes()
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+    sprintf(query, "SELECT * FROM Paciente");
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    res = mysql_store_result(conn);
+
+    printf("\n+----- Pacientes -----+\n\n");
+    while ((row = mysql_fetch_row(res)) != NULL)
+    {
+        printf("Id: %s,\nNome: %s,\nEmail: %s,\nCPF: %s,\nTelefone: %s,\nEndereco: %s;\n\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+    }
+    printf("+----- Fim - Pacientes -----+\n");
+    mysql_free_result(res);
+    mysql_close(conn);
+}
+
+void atualizaPaciente(char nomeAntigo[], Paciente paciente)
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+    sprintf(query, "UPDATE Paciente SET nome = '%s', email = '%s', cpf = '%s', telefone = '%s', endereco = '%s' WHERE nome = '%s'", paciente.nome, paciente.email, paciente.cpf, paciente.telefone, paciente.endereco, nomeAntigo);
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("\nDados alterados com sucesso!\n\n");
     mysql_close(conn);
 }
 
@@ -561,7 +682,7 @@ gerenc_medicos:
         scanf("%[^\n]", medico.endereco);
         printf("(Medico)Digite a especializacao: ");
         scanf("%c", temp);
-        scanf("%[^\n]", medico.especialidade);
+        scanf("%[^\n]", medico.especializacao);
 
         adicionarMedico(medico);
         goto gerenc_medicos;
@@ -597,8 +718,20 @@ gerenc_medicos:
         scanf("%[^\n]", medico.endereco);
         printf("[UPDATE](Medico)Nova especializacao: ");
         scanf("%c", temp);
-        scanf("%[^\n]", medico.especialidade);
+        scanf("%[^\n]", medico.especializacao);
 
+        atualizarMedico(nomeAntigo, medico);
+        goto gerenc_medicos;
+    }
+    else if (escolha == 4)
+    {
+        char nome[150];
+
+        printf("Nome do medico: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+
+        excluirMedico(nome);
         goto gerenc_medicos;
     }
     else

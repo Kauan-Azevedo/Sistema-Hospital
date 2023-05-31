@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `sistema_hospital`.`Medico` (
   `especializacao` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idDoutor_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `cof_UNIQUE` (`cpf` ASC) VISIBLE,
+  UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE,
   UNIQUE INDEX `telefone_UNIQUE` (`telefone` ASC) VISIBLE)
 ENGINE = InnoDB;
 
