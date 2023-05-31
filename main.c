@@ -444,7 +444,7 @@ void listarPacientes()
     mysql_close(conn);
 }
 
-void atualizaPaciente(char nomeAntigo[], Paciente paciente)
+void atualizarPaciente(char nomeAntigo[], Paciente paciente)
 {
     MYSQL *conn;
 
@@ -462,6 +462,30 @@ void atualizaPaciente(char nomeAntigo[], Paciente paciente)
         exit(1);
     }
     printf("\nDados alterados com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void excluirPaciente(char nome[])
+{
+    MYSQL *conn;
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char deleteQuery[1000];
+    sprintf(deleteQuery, "DELETE FROM Paciente WHERE nome = '%s'", nome);
+    if (mysql_query(conn, deleteQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    printf("Dados excluídos com sucesso!\n\n");
     mysql_close(conn);
 }
 
@@ -741,7 +765,7 @@ gerenc_medicos:
     }
 
 gerenc_pacientes:
-    printf("\n0 - Voltar\n1 - Registrar Paciente\n2 - Listar Pacientes\n3 - Procurar Paciente\n4 - Atualizar Paciente\n5 - Excluir Paciente\nEscolha: ");
+    printf("\n0 - Voltar\n1 - Registrar Paciente\n2 - Listar Pacientes\n3 - Atualizar Paciente\n4 - Excluir Paciente\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -749,19 +773,63 @@ gerenc_pacientes:
     }
     else if (escolha == 1)
     {
-        printf("WIP");
+        Paciente paciente;
+
+        printf("(Paciente)Digite o nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.nome);
+        printf("(Paciente)Digite o CPF: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.cpf);
+        printf("(Paciente)Digite o telefone: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.telefone);
+        printf("(Paciente)Digite o endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.endereco);
+
+        adicionarPaciente(paciente);
+        goto gerenc_pacientes;
     }
     else if (escolha == 2)
     {
-        printf("WIP");
+        listarPacientes();
+        goto gerenc_pacientes;
     }
     else if (escolha == 3)
     {
-        printf("WIP");
+        char nomeAntigo[150];
+        Paciente paciente;
+
+        printf("Nome do paciente: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeAntigo);
+        printf("[UPDATE](Paciente)Novo nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.nome);
+        printf("[UPDATE](Paciente)Novo cpf: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.cpf);
+        printf("[UPDATE](Paciente)Novo telefone: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.telefone);
+        printf("[UPDATE](Paciente)Novo endereco: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", paciente.endereco);
+
+        atualizarPaciente(nomeAntigo, paciente);
+        goto gerenc_pacientes;
     }
     else if (escolha == 4)
     {
-        printf("WIP");
+        char nome[150];
+
+        printf("Nome do paciente: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+
+        excluirPaciente(nome);
+        goto gerenc_pacientes;
     }
     else
     {
