@@ -489,6 +489,104 @@ void excluirPaciente(char nome[])
     mysql_close(conn);
 }
 
+void adicionarDoenca(Doenca doenca)
+{
+    MYSQL *conn;
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char query[1000];
+    sprintf(query, "INSERT INTO Doenca (nome, descricao, gravidade) VALUES ('%s', '%s', '%i')", doenca.nome, doenca.descricao, doenca.gravidade);
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("Dados inseridos com sucesso!\n");
+    mysql_close(conn);
+}
+
+void listarDoencas()
+{
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    char query[1000];
+
+    sprintf(query, "SELECT * FROM Doenca");
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+
+    res = mysql_store_result(conn);
+
+    printf("\n+----- Doenças -----+\n\n");
+    while ((row = mysql_fetch_row(res)) != NULL)
+    {
+        printf("Id: %s,\nNome: %s,\nDescrição: %s,\nGravidade: %s;\n\n", row[0], row[1], row[2], row[3]);
+    }
+    printf("+----- Fim - Doenças -----+\n");
+    mysql_free_result(res);
+    mysql_close(conn);
+}
+
+void atualizarDoenca(char nomeAntigo[], Doenca doenca)
+{
+    MYSQL *conn;
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 9))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char query[1000];
+    sprintf(query, "UPDATE Doenca SET nome = '%s', descricao = '%s', gravidade = '%i' WHERE nome = '%s'", doenca.nome, doenca.descricao, doenca.gravidade, nomeAntigo);
+    if (mysql_query(conn, query) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("\nDados alterados com sucesso!\n\n");
+    mysql_close(conn);
+}
+
+void excluirDoenca(char nome[])
+{
+    MYSQL *conn;
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    char deleteQuery[1000];
+    sprintf(deleteQuery, "DELETE FROM Doenca WHERE nome = '%s'", nome);
+    if (mysql_query(conn, deleteQuery) != 0)
+    {
+        fprintf(stderr, "%s\n", mysql_error(conn));
+        exit(1);
+    }
+    printf("Dados excluídos com sucesso!\n\n");
+    mysql_close(conn);
+}
+
 int main()
 {
     int escolha;
@@ -535,7 +633,7 @@ inicio:
     }
 
 gerenc_hospitais:
-    printf("\n0 - Voltar\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Procurar Hospital\n4 - Atualizar Hospital\n5 - Excluir Hospital\nEscolha: ");
+    printf("\n0 - Voltar\n1 - Registrar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -565,11 +663,6 @@ gerenc_hospitais:
     }
     else if (escolha == 3)
     {
-        printf("WIP");
-        goto gerenc_hospitais;
-    }
-    else if (escolha == 4)
-    {
         char nomeAntigo[150];
         Hospital hospital;
 
@@ -589,7 +682,7 @@ gerenc_hospitais:
         atualizarHospital(nomeAntigo, hospital);
         goto gerenc_hospitais;
     }
-    else if (escolha == 5)
+    else if (escolha == 4)
     {
         char nome[150];
 
@@ -723,7 +816,6 @@ gerenc_medicos:
 
         printf("Nome do medico: ");
         scanf("%c", temp);
-
         scanf("%[^\n]", nomeAntigo);
         printf("[UPDATE](Medico)Novo nome: ");
         scanf("%c", temp);
@@ -838,7 +930,7 @@ gerenc_pacientes:
     }
 
 gerenc_doencas:
-    printf("\n0 - Voltar\n1 - Registrar Doenca\n2 - Listar Doencas\n3 - Procurar Doenca\n4 - Atualizar Doenca\n5 - Excluir Doenca\nEscolha: ");
+    printf("\n0 - Voltar\n1 - Registrar Doenca\n2 - Listar Doencas\n3 - Atualizar Doenca\n4 - Excluir Doenca\nEscolha: ");
     scanf("%i", &escolha);
     if (escolha == 0)
     {
@@ -846,19 +938,56 @@ gerenc_doencas:
     }
     else if (escolha == 1)
     {
-        printf("WIP");
+        Doenca doenca;
+
+        printf("(Doenca)Digite o nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", doenca.nome);
+        printf("(Doenca)Digite a descricao: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", doenca.descricao);
+        printf("(Doenca)Digite a gravidade: ");
+        scanf("%i", &doenca.gravidade);
+
+        adicionarDoenca(doenca);
+        goto gerenc_doencas;
     }
     else if (escolha == 2)
     {
-        printf("WIP");
+        listarDoencas();
+        goto gerenc_doencas;
     }
     else if (escolha == 3)
     {
-        printf("WIP");
+        char nomeAntigo[150];
+        Doenca doenca;
+
+        printf("Nome da doenca: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nomeAntigo);
+        printf("[UPDATE](Doenca)Novo nome: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", doenca.nome);
+        printf("[UPDATE](Doenca)Nova descricao: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", doenca.descricao);
+        printf("[UPDATE](Doenca)Nova gravidade: ");
+        scanf("%c", temp);
+        scanf("%i", &doenca.gravidade);
+
+        atualizarDoenca(nomeAntigo, doenca);
+        goto gerenc_doencas;
     }
     else if (escolha == 4)
     {
-        printf("WIP");
+        char nome[150];
+
+        printf("Nome da doenca: ");
+        scanf("%c", temp);
+        scanf("%[^\n]", nome);
+
+        excluirDoenca(nome);
+        goto gerenc_doencas;
     }
     else
     {
