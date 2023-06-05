@@ -1005,18 +1005,22 @@ gerenc_prontuarios:
     else if (escolha == 1)
     {
         printf("WIP");
+        goto inicio;
     }
     else if (escolha == 2)
     {
         printf("WIP");
+        goto inicio;
     }
     else if (escolha == 3)
     {
         printf("WIP");
+        goto inicio;
     }
     else if (escolha == 4)
     {
         printf("WIP");
+        goto inicio;
     }
     else
     {
