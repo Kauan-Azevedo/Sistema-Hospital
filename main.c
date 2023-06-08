@@ -125,8 +125,8 @@ void atualizarHospital(char nomeAntigo[], Hospital hospital)
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
     }
-    char query[1000];
 
+    char query[1000];
     sprintf(query, "UPDATE Hospital SET nome = '%s', endereco = '%s', cep = '%s' WHERE nome = '%s'", hospital.nome, hospital.endereco, hospital.cep, nomeAntigo);
     if (mysql_query(conn, query))
     {

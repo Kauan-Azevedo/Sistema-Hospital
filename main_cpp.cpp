@@ -1,15 +1,16 @@
 #include <iostream>
 #include <mysql/mysql.h>
+#include <string.h>
 
 using namespace std;
 
 class Database
 {
 private:
-    char *server;
-    char *user;
-    char *password;
-    char *database;
+    const char *server;
+    const char *user;
+    const char *password;
+    const char *database;
 
 public:
     Database()
@@ -47,11 +48,18 @@ private:
     char cep[11];
 
 public:
-    Hospital()
+    Hospital(char nome[150], char endereco[150], char cep[11])
     {
+        strcpy(this->nome, nome);
+        strcpy(this->endereco, endereco);
+        strcpy(this->cep, cep);
     }
 
     void create()
+    {
+    ''}
+
+    void read()
     {
         MYSQL *conn = this->create_connection();
         MYSQL_RES *res;
@@ -78,9 +86,10 @@ int main()
     int escolha;
     char temp[1];
 
+    printf("Bem-vindo, Ao gerenciador de Prontuarios \n");
     while (escolha != 0)
     {
-        printf("Bem-vindo,\no que deseja fazer?\n");
+        printf("0 - Sair\n1 - Adicionar Hospital\n2 - LIstar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
         scanf("%i", &escolha);
 
         if (escolha == 1)
@@ -100,6 +109,10 @@ int main()
             scanf("%s", cep);
 
             Hospital hospital(nome, endereco, cep);
+            hospital.create();
+        }
+        else if (escolha == 2)
+        {
         }
     };
 
