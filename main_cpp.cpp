@@ -58,6 +58,17 @@ public:
 
     void create()
     {
+        MYSQL *conn = this->create_connection();
+        char query[1000];
+        sprintf(query, "INSERT INTO Hospital(nome,endereco,cep) VALUES('%s','%s','%s')", this->nome, this->endereco, this->cep);
+
+        if (mysql_query(conn, query))
+        {
+            fprintf(stderr, "%s\n", mysql_error(conn));
+            exit(1);
+        }
+        printf("\nDados inseridos com sucesso!\n");
+        mysql_close(conn);
     }
 
     void read()
@@ -84,13 +95,13 @@ public:
 
 int main()
 {
-    int escolha;
+    int escolha = -1;
     char temp[1];
 
     printf("Bem-vindo, Ao gerenciador de Prontuarios \n");
     while (escolha != 0)
     {
-        printf("0 - Sair\n1 - Adicionar Hospital\n2 - LIstar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
+        printf("0 - Sair\n1 - Adicionar Hospital\n2 - Listar Hospitais\n3 - Atualizar Hospital\n4 - Excluir Hospital\nEscolha: ");
         scanf("%i", &escolha);
 
         if (escolha == 1)
@@ -115,7 +126,6 @@ int main()
         else if (escolha == 2)
         {
             Hospital hospital;
-
             hospital.read();
         }
     };
