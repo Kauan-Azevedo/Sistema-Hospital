@@ -107,6 +107,19 @@ public:
         }
         printf("\nDados alterados com sucesso!\n\n");
         this->end_connection(conn);
+    };
+
+    void remove(char nome[150])
+    {
+        MYSQL *conn = this->create_connection();
+        char query[1000];
+        sprintf(query, "DELETE FROM Hospital WHERE nome = '%s'", nome);
+        if (mysql_query(conn, query) != 0)
+        {
+            fprintf(stderr, "%s\n", mysql_error(conn));
+        }
+        printf("\nDados excluidos com sucesso!\n");
+        this->end_connection(conn);
     }
 };
 
@@ -168,6 +181,21 @@ int main()
 
             Hospital hospital(nome, endereco, cep);
             hospital.update(nomeAntigo);
+        }
+        else if (escolha == 4)
+        {
+            char nome[150];
+
+            printf("Nome do hospital: ");
+            scanf("%c", temp);
+            scanf("%[^\n]", nome);
+
+            Hospital hospital;
+            hospital.remove(nome);
+        }
+        else
+        {
+            printf("\nValor invalido!\n");
         }
     };
 
