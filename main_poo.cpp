@@ -48,6 +48,7 @@ private:
     char cep[11];
 
 public:
+    Hospital() {}
     Hospital(char nome[150], char endereco[150], char cep[11])
     {
         strcpy(this->nome, nome);
@@ -57,7 +58,8 @@ public:
 
     void create()
     {
-    ''}
+        
+    }
 
     void read()
     {
@@ -113,6 +115,9 @@ int main()
         }
         else if (escolha == 2)
         {
+            Hospital hospital;
+
+            hospital.read();
         }
     };
 
