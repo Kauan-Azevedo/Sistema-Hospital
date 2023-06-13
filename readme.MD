@@ -1,10 +1,11 @@
 # Projeto 🛠️
 
--   Projeto em C voltado para criação de um gerenciador de prontuários médicos de um hospital.
+-   Projeto em C e C++ voltado para criação de um gerenciador de prontuários médicos de um hospital.
 
 ## Sobre 📚
 
--   Esse projeto tem como intuito de exercitar e aprender como funciona o paradigma estruturado. esenvolvido como atividade avaliativa do curso de Análise e Desenvolvimento de Sistemas na faculdade Cesusc (ADS21 - Técnicas e Paradigmas da Programação II).
+-   <span style="color:rgb(255,0,0);font-weight:bold">O projeto desenvolvido usando WSL2 Ubuntu22.04.1</span>
+-   Esse projeto tem como intuito de exercitar e aprender como funciona o paradigma estruturado e orientado a objeto.Desenvolvido como atividade avaliativa N2 e N3 do curso de Análise e Desenvolvimento de Sistemas na faculdade Cesusc (ADS21 - Técnicas e Paradigmas da Programação II).
 
 ### Compilar o arquivo 🌟
 
