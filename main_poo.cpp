@@ -58,7 +58,18 @@ public:
 
     void create()
     {
-        
+        MYSQL *conn = this->create_connection();
+
+        char query[1000];
+        sprintf(query, "INSERT INTO Hospital(nome, endereco, cep) VALUES('%s', '%s', '%s')", this->nome, this->endereco, this->cep);
+
+        if (mysql_query(conn, query))
+        {
+            fprintf(stderr, "%s\n", mysql_error(conn));
+            exit(1);
+        }
+        printf("\nDados inseridos com sucesso!\n");
+        this->end_connection(conn);
     }
 
     void read()
