@@ -96,29 +96,50 @@ public:
     void update(char nomeAntigo[])
     {
         MYSQL *conn = this->create_connection();
+        MYSQL_RES *res;
 
         char query[1000];
-
         sprintf(query, "UPDATE Hospital SET nome='%s', endereco='%s', cep='%s' WHERE nome='%s'", this->nome, this->endereco, this->cep, nomeAntigo);
-        if (mysql_query(conn, query))
+        if (mysql_query(conn, query) != 0)
         {
             fprintf(stderr, "%s\n", mysql_error(conn));
-            exit(1);
         }
-        printf("\nDados alterados com sucesso!\n\n");
+        res = mysql_store_result(conn);
+        if (res != 0)
+        {
+            printf("\nDados alterados com sucesso!\n\n");
+        }
+        else
+        {
+            printf("Não há hospital com esse nome!");
+        }
         this->end_connection(conn);
     };
 
     void remove(char nome[150])
     {
         MYSQL *conn = this->create_connection();
+        MYSQL_RES *res;
+        MYSQL_ROW row;
+
         char query[1000];
         sprintf(query, "DELETE FROM Hospital WHERE nome = '%s'", nome);
         if (mysql_query(conn, query) != 0)
         {
             fprintf(stderr, "%s\n", mysql_error(conn));
         }
-        printf("\nDados excluidos com sucesso!\n");
+        res = mysql_store_result(conn);
+        if (res != 0)
+        {
+            printf("\nDados excluidos com sucesso!\n");
+            // std::cout << "valor do res: " << res << std::endl;
+        }
+        else
+        {
+            cout << "Não há Hospital com esse nome!" << std::endl;
+            cout << "Nada foi excluído!" << std::endl;
+            // std::cout << "valor do res: " << res << std::endl;
+        }
         this->end_connection(conn);
     }
 };
